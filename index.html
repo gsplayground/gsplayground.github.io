@@ -85,16 +85,22 @@
             background: rgba(2,6,14,0.55);
             box-shadow: 0 0 0 1px rgba(0,212,255,0.08), 0 18px 50px rgba(0,0,0,0.35);
         }
-        .contrib-card-visual img {
+        .contrib-card-visual img,
+        .contrib-card-visual video {
             display: block;
             width: 100%;
             height: 170px;
             object-fit: cover;
-            transform: scale(1.02);
             filter: saturate(1.05) contrast(1.05);
         }
+        /* Video content tends to crop vertically; zoom out slightly */
+        .contrib-card-visual video {
+            transform: scale(0.94);
+            transform-origin: center;
+        }
         @media (min-width: 1024px) {
-            .contrib-card-visual img { height: 190px; }
+            .contrib-card-visual img,
+            .contrib-card-visual video { height: 190px; }
         }
 
         /* Section divider */
@@ -207,20 +213,42 @@
             border-bottom:1px solid rgba(0,212,255,.32);
             text-shadow:0 0 10px rgba(0,212,255,.22);
         }
-        .stbl td { padding:6px 8px; font-size:10px; white-space:normal; font-family:'JetBrains Mono',monospace; text-align:center; }
-        .stbl .nowrap { white-space:nowrap; }
-        .stbl tr { border-top:1px solid rgba(255,255,255,0.04); }
-        .stbl tr.ours { background:rgba(0,212,255,0.06); }
-        .stbl tr.ours td { border-top:1px solid rgba(0,212,255,0.18); border-bottom:1px solid rgba(0,212,255,0.18); }
+        .stbl td,
+        .tbl td { padding:6px 8px; font-size:10px; white-space:normal; font-family:'JetBrains Mono',monospace; text-align:center; }
+        .stbl .nowrap,
+        .tbl .nowrap { white-space:nowrap; }
+        .stbl tr,
+        .tbl tr { border-top:1px solid rgba(255,255,255,0.04); }
+        .stbl tr.ours,
+        .tbl tr.ours { background:rgba(0,212,255,0.06); }
+        .stbl tr.ours td,
+        .tbl tr.ours td { border-top:1px solid rgba(0,212,255,0.18); border-bottom:1px solid rgba(0,212,255,0.18); }
 
         /* Freeze first column when scrolling horizontally */
-        .stbl .sticky-col {
+        .stbl .sticky-col,
+        .tbl .sticky-col {
             position: sticky;
             left: 0;
             z-index: 3;
             background: rgba(2,6,14,.92);
             box-shadow: 1px 0 0 rgba(0,212,255,0.10);
-            text-align: left;
+            text-align: center;
+        }
+        .stbl thead .sticky-col,
+        .tbl thead .sticky-col { z-index: 4; background: rgba(2,6,14,.96); white-space: normal; }
+        .stbl tr.ours .sticky-col,
+        .tbl tr.ours .sticky-col { background: rgba(0,212,255,0.06); }
+
+        /* Vertically center the sticky header cell (SIMULATORS) */
+        .stbl thead th.sticky-col,
+        .tbl thead th.sticky-col { vertical-align: middle; }
+
+        /* Center the "dot + name" inline-flex label in table cells */
+        .stbl td .inline-flex.items-center.gap-2,
+        .tbl td .inline-flex.items-center.gap-2 {
+            justify-content: center;
+            width: 100%;
+            text-align: center;
         }
         .stbl thead .sticky-col { z-index: 4; background: rgba(5,16,30,.98); white-space: normal; }
         .stbl tr.ours .sticky-col { background: rgba(0,212,255,0.06); }
@@ -388,7 +416,7 @@
                 <div class="mono text-[9px] mt-1 tracking-wider" style="color:var(--t3)">PARALLEL SCENES</div>
             </div>
             <div class="px-5 py-3.5 text-center">
-                <div class="mono font-black grad" style="font-size:1.7rem">SIM2REAL</div>
+                <div class="mono font-black grad" style="font-size:1.7rem">Sim2Real</div>
                 <div class="mono text-[9px] mt-1 tracking-wider leading-snug" style="color:var(--t3)">SMALLER SIM–REAL GAP ACROSS TASKS<br>ZERO-SHOT ON REAL HARDWARE</div>
             </div>
             <div class="px-5 py-3.5 text-center">
@@ -485,9 +513,11 @@
                 <h3 class="text-lg font-bold text-white mb-2">Memory-Efficient Batch 3DGS Rendering</h3>
                 <p class="text-sm leading-relaxed mb-5" style="color:var(--t2)">10,000 FPS photorealistic rendering across 2,048 parallel scenes on a single GPU. 90%+ Gaussian compression, PSNR drop &lt;0.05.</p>
                 <div class="contrib-card-visual mb-5">
-                    <img loading="lazy" decoding="async"
-                         src="assets/K2.png"
-                         alt="High-throughput sensor-centric rendering preview: dense observations in a cluttered scene">
+                    <video class="w-full h-full object-cover block"
+                           autoplay loop muted playsinline preload="metadata"
+                           aria-label="High-throughput sensor-centric rendering preview: dense observations in a cluttered scene">
+                        <source src="assets/K2.mp4" type="video/mp4">
+                    </video>
                 </div>
                 <div class="flex flex-wrap gap-1.5">
                     <span class="mono text-[9px] px-2 py-0.5 rounded" style="background:rgba(0,212,255,0.1);color:var(--c1);border:1px solid rgba(0,212,255,0.2)">10K FPS</span>
@@ -522,7 +552,7 @@
         <div>
             <p class="slabel mb-5">simulator comparison</p>
             <div class="overflow-x-auto rounded-2xl glow-c">
-                <table class="w-full stbl">
+                <table class="w-full stbl tbl">
                     <thead>
                         <tr>
                             <th class="text-left sticky-col">Simulators</th>
@@ -713,7 +743,6 @@
                         <tr class="ours">
                             <td class="font-black text-white sticky-col">
                                 <span class="inline-flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full" style="background:var(--c1);box-shadow:0 0 6px var(--c1)"></span>
                                     GS-Playground
                                 </span>
                             </td>
@@ -771,38 +800,38 @@
                 </p>
 
                 <!-- Performance bars -->
-                <div class="glass rounded-xl p-6 mb-6">
-                    <p class="mono text-[11px] mb-5" style="color:var(--t3)">// N=50 humanoids · single environment · AMD 9950X + RTX 5090</p>
-                    <div class="space-y-4">
+                <div class="glass rounded-xl p-4 mb-3">
+                    <p class="mono text-[11px] mb-2 leading-snug" style="color:var(--t3)">// N=50 humanoids · single environment · AMD 9950X + RTX 5090</p>
+                    <div class="space-y-2">
                         <div>
-                            <div class="flex justify-between mono text-xs mb-1.5">
+                            <div class="flex justify-between mono text-xs mb-1">
                                 <span class="text-white flex items-center gap-1.5"><span class="w-2 h-2 rounded-full inline-block" style="background:var(--c1)"></span>GS-Playground</span>
                                 <span style="color:var(--c1)">1,015 FPS</span>
                             </div>
-                            <div class="h-2.5 rounded-full overflow-hidden" style="background:rgba(255,255,255,0.06)">
+                            <div class="h-2 rounded-full overflow-hidden" style="background:rgba(255,255,255,0.06)">
                                 <div class="h-full rounded-full" style="width:100%;background:linear-gradient(90deg,var(--c1),var(--c2))"></div>
                             </div>
                         </div>
                         <div>
-                            <div class="flex justify-between mono text-xs mb-1.5">
+                            <div class="flex justify-between mono text-xs mb-1">
                                 <span style="color:var(--t2)">MuJoCo</span>
                                 <span style="color:var(--t3)">32 FPS</span>
                             </div>
-                            <div class="h-2.5 rounded-full overflow-hidden" style="background:rgba(255,255,255,0.06)">
+                            <div class="h-2 rounded-full overflow-hidden" style="background:rgba(255,255,255,0.06)">
                                 <div class="h-full rounded-full" style="width:3.1%;background:var(--t3)"></div>
                             </div>
                         </div>
                         <div>
-                            <div class="flex justify-between mono text-xs mb-1.5">
+                            <div class="flex justify-between mono text-xs mb-1">
                                 <span style="color:var(--t3)">MjWarp</span>
                                 <span style="color:#f43f5e" class="text-[10px]">1.71 FPS ↯ collapse</span>
                             </div>
-                            <div class="h-2.5 rounded-full overflow-hidden" style="background:rgba(255,255,255,0.06)">
+                            <div class="h-2 rounded-full overflow-hidden" style="background:rgba(255,255,255,0.06)">
                                 <div class="h-full rounded-full" style="width:0.2%;background:rgba(244,63,94,0.4)"></div>
                             </div>
                         </div>
                     </div>
-                    <div class="flex gap-6 mt-5 pt-4" style="border-top:1px solid var(--bdr)">
+                    <div class="flex gap-6 mt-3 pt-2" style="border-top:1px solid var(--bdr)">
                         <div class="text-center"><div class="mono font-black text-white text-lg">32×</div><div class="mono text-[9px] mt-0.5" style="color:var(--t3)">vs MuJoCo</div></div>
                         <div class="text-center"><div class="mono font-black grad text-lg">~600×</div><div class="mono text-[9px] mt-0.5" style="color:var(--t3)">vs MjWarp</div></div>
                         <div class="text-center"><div class="mono font-black text-white text-lg">3+</div><div class="mono text-[9px] mt-0.5" style="color:var(--t3)">platforms</div></div>
@@ -842,32 +871,40 @@
                 </div>
                 <!-- Store: scene + chart -->
                 <p class="slabel mb-3">stability benchmarks</p>
-                <div class="grid sm:grid-cols-2 gap-4 items-stretch">
-                    <div class="relative rounded-xl overflow-hidden">
-                        <img src="assets/paper/store_mujoco.png"
-                             alt="Complex multi-body scene" class="w-full h-60 sm:h-64 object-contain" style="border:1px solid var(--bdr);background:rgba(2,6,14,0.25)">
-                        <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(3,8,15,.75),transparent 50%)"></div>
-                        <div class="absolute top-3 left-1/2 -translate-x-1/2 text-center">
-                            <span class="mono text-[10px] font-bold px-2 py-1 rounded whitespace-nowrap" style="background:rgba(34,197,94,0.62);color:#000">Complex Multi-Body Scene — Stable Equilibrium</span>
-                        </div>
-                    </div>
-                    <div class="chartcar glass rounded-2xl overflow-hidden" data-chartcar style="border:none;background:rgba(2,6,14,0.18)">
-                        <div class="chartcar-slide active">
-                            <div class="p-1.5 sm:p-2">
-                                <img src="assets/store_stability.png" alt="Store stability benchmark chart"
-                                     class="w-full h-60 sm:h-64 object-contain block" style="background:transparent">
+                <div class="chartcar" data-chartcar>
+                    <!-- Slide 1: left image + right chart -->
+                    <div class="chartcar-slide">
+                        <div class="grid sm:grid-cols-2 gap-4 items-stretch">
+                            <div class="relative rounded-xl overflow-hidden">
+                                <img src="assets/paper/store_mujoco.png"
+                                     alt="Complex multi-body scene" class="w-full h-60 sm:h-64 object-contain" style="border:1px solid var(--bdr);background:rgba(2,6,14,0.25)">
+                                <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(3,8,15,.75),transparent 50%)"></div>
+                                <div class="absolute top-3 left-1/2 -translate-x-1/2 text-center">
+                                    <span class="mono text-[10px] font-bold px-2 py-1 rounded whitespace-nowrap" style="background:rgba(34,197,94,0.62);color:#000">Complex Multi-Body Scene — Stable Equilibrium</span>
+                                </div>
+                            </div>
+                            <div class="glass rounded-2xl overflow-hidden" style="border:none;background:rgba(2,6,14,0.18)">
+                                <div class="p-1.5 sm:p-2">
+                                    <img src="assets/store_stability.png" alt="Store stability benchmark chart"
+                                         class="w-full h-60 sm:h-64 object-contain block" style="background:transparent">
+                                </div>
                             </div>
                         </div>
-                        <div class="chartcar-slide">
+                    </div>
+
+                    <!-- Slide 2: one wide chart spanning full width -->
+                    <div class="chartcar-slide active">
+                        <div class="glass rounded-2xl overflow-hidden" style="border:none;background:rgba(2,6,14,0.18)">
                             <div class="p-1.5 sm:p-2">
                                 <img src="assets/humanoid_complexity_bench.png" alt="Humanoid complexity benchmark chart"
                                      class="w-full h-60 sm:h-64 object-contain block" style="background:transparent">
                             </div>
                         </div>
-                        <div class="chartcar-dots" aria-label="Chart carousel controls">
-                            <button class="chartcar-dot active" type="button" aria-label="Show store stability"></button>
-                            <button class="chartcar-dot" type="button" aria-label="Show humanoid complexity"></button>
-                        </div>
+                    </div>
+
+                    <div class="chartcar-dots" aria-label="Chart carousel controls">
+                        <button class="chartcar-dot" type="button" aria-label="Show scene + stability"></button>
+                        <button class="chartcar-dot active" type="button" aria-label="Show humanoid complexity"></button>
                     </div>
                 </div>
 
@@ -1124,10 +1161,10 @@
             <!-- Locomotion -->
             <div class="glass rounded-2xl overflow-hidden app-card flex flex-col h-full" style="border-color:rgba(0,212,255,0.12)">
                 <div class="relative overflow-hidden h-48 shrink-0">
-                    <img src="assets/paper/newton_ours_post_impact.jpg"
-                         alt="Locomotion" class="w-full h-full object-cover opacity-80">
-                    <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(3,8,15,.9) 30%,transparent)"></div>
-                    <div class="absolute top-3 left-3 num-badge" style="background:var(--bg);color:var(--c1);border:1px solid var(--c1)">Experiment 02</div>
+                    <video class="w-full h-full object-cover opacity-80" autoplay loop muted playsinline preload="metadata" aria-label="Locomotion experiment video">
+                        <source src="assets/E/E1.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute top-3 left-3 num-badge" style="background:var(--bg);color:var(--c1);border:1px solid var(--c1)">Experiment 01</div>
                 </div>
                 <div class="p-6 flex flex-col flex-1">
                     <h3 class="font-bold text-white text-lg mb-2">Locomotion</h3>
@@ -1144,10 +1181,10 @@
             <!-- Manipulation -->
             <div class="glass rounded-2xl overflow-hidden app-card flex flex-col h-full" style="border-color:rgba(0,212,255,0.12)">
                 <div class="relative overflow-hidden h-48 shrink-0">
-                    <img src="assets/paper/ours_spot_after.jpg"
-                         alt="Manipulation" class="w-full h-full object-cover opacity-80">
-                    <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(3,8,15,.9) 30%,transparent)"></div>
-                    <div class="absolute top-3 left-3 num-badge" style="background:var(--bg);color:var(--c1);border:1px solid var(--c1)">Experiment 01</div>
+                    <video class="w-full h-full object-cover opacity-80" autoplay loop muted playsinline preload="metadata" aria-label="Manipulation experiment video">
+                        <source src="assets/E/E2.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute top-3 left-3 num-badge" style="background:var(--bg);color:var(--c1);border:1px solid var(--c1)">Experiment 02</div>
                 </div>
                 <div class="p-6 flex flex-col flex-1">
                     <h3 class="font-bold text-white text-lg mb-2">Manipulation</h3>
@@ -1164,9 +1201,9 @@
             <!-- Navigation -->
             <div class="glass rounded-2xl overflow-hidden app-card flex flex-col h-full" style="border-color:rgba(0,212,255,0.12)">
                 <div class="relative overflow-hidden h-48 shrink-0">
-                    <img src="assets/paper/store_mujoco.png"
-                         alt="Navigation" class="w-full h-full object-cover opacity-80">
-                    <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(3,8,15,.9) 30%,transparent)"></div>
+                    <video class="w-full h-full object-cover opacity-80" autoplay loop muted playsinline preload="metadata" aria-label="Navigation experiment video">
+                        <source src="assets/E/E3.mp4" type="video/mp4">
+                    </video>
                     <div class="absolute top-3 left-3 num-badge" style="background:var(--bg);color:var(--c1);border:1px solid var(--c1)">Experiment 03</div>
                 </div>
                 <div class="p-6 flex flex-col flex-1">
@@ -1449,7 +1486,7 @@ window.addEventListener('scroll', () => {
     });
 })();
 
-// ── Chart carousel (physics right column) ──
+// ── Chart carousel (physics stability benchmarks) ──
 (function () {
     const cars = document.querySelectorAll('[data-chartcar]');
     if (!cars.length) return;
@@ -1464,12 +1501,37 @@ window.addEventListener('scroll', () => {
             dots.forEach((d, i) => d.classList.toggle('active', i === idx));
         };
 
-        dots.forEach((d, i) => d.addEventListener('click', () => setIdx(i)));
+        const getCur = () => Math.max(0, slides.findIndex(s => s.classList.contains('active')));
+
+        // Auto-rotate (pause on hover / user intent)
+        const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const intervalMs = 4200;
+        let timer = null;
+        const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
+        const start = () => {
+            if (reduced) return;
+            stop();
+            timer = setInterval(() => {
+                const cur = getCur();
+                setIdx((cur + 1) % slides.length);
+            }, intervalMs);
+        };
+
+        dots.forEach((d, i) => d.addEventListener('click', () => { setIdx(i); start(); }));
+        car.addEventListener('mouseenter', stop);
+        car.addEventListener('mouseleave', start);
+        car.addEventListener('focusin', stop);
+        car.addEventListener('focusout', start);
+
+        // Click anywhere (except dots) toggles, and resets timer
         car.addEventListener('click', (e) => {
             if (e.target.closest('.chartcar-dot')) return;
-            const cur = slides.findIndex(s => s.classList.contains('active'));
-            setIdx(cur === 0 ? 1 : 0);
+            const cur = getCur();
+            setIdx((cur + 1) % slides.length);
+            start();
         });
+
+        start();
     });
 })();
 
