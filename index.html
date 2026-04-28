@@ -189,21 +189,23 @@
         /* Table */
         .stbl { table-layout:auto; width:100%; }
         .stbl th {
-            background:rgba(2,6,14,.9);
-            color:#3a5270;
-            font-size:8.5px;
-            font-weight:700;
+            background:rgba(5,16,30,.98);
+            color:var(--t1);
+            font-size:9px;
+            font-weight:900;
             font-family:'JetBrains Mono',monospace;
             text-transform:uppercase;
-            letter-spacing:.06em;
-            padding:6px 6px;
+            letter-spacing:.075em;
+            padding:8px 7px;
             white-space:normal;
-            line-height:1.12;
+            line-height:1.18;
             text-align:center;
             vertical-align:bottom;
             overflow-wrap:anywhere;
             word-break:normal;
             hyphens:auto;
+            border-bottom:1px solid rgba(0,212,255,.32);
+            text-shadow:0 0 10px rgba(0,212,255,.22);
         }
         .stbl td { padding:6px 8px; font-size:10px; white-space:normal; font-family:'JetBrains Mono',monospace; text-align:center; }
         .stbl .nowrap { white-space:nowrap; }
@@ -220,7 +222,7 @@
             box-shadow: 1px 0 0 rgba(0,212,255,0.10);
             text-align: left;
         }
-        .stbl thead .sticky-col { z-index: 4; background: rgba(2,6,14,.96); white-space: normal; }
+        .stbl thead .sticky-col { z-index: 4; background: rgba(5,16,30,.98); white-space: normal; }
         .stbl tr.ours .sticky-col { background: rgba(0,212,255,0.06); }
 
         /* Metric card accent bar */
@@ -390,7 +392,7 @@
                 <div class="mono text-[9px] mt-1 tracking-wider leading-snug" style="color:var(--t3)">SMALLER SIM–REAL GAP ACROSS TASKS<br>ZERO-SHOT ON REAL HARDWARE</div>
             </div>
             <div class="px-5 py-3.5 text-center">
-                <div class="mono font-black grad" style="font-size:1.7rem">&lt;5m</div>
+                <div class="mono font-black grad" style="font-size:1.7rem">&lt;5min</div>
                 <div class="mono text-[9px] mt-1 tracking-wider leading-snug" style="color:var(--t3)">FROM ONE RGB IMAGE<br>TO SIM-READY ASSET</div>
             </div>
         </div>
