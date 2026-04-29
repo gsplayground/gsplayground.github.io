@@ -134,6 +134,10 @@
         /* Video compare (Real2Sim2Real) — layered wipe */
         .vcompare { position:relative; width:100%; overflow:hidden; border-radius:14px; background:rgba(2,6,14,0.35); }
         .vcompare.vcompare-thumb { height:128px; } /* match old h-32 thumbnails */
+        .vcompare.vcompare-thumb-physics { height:144px; } /* match former h-36 cards in physics */
+        .vcompare.vcompare-thumb-physics video { object-fit:contain; background:rgba(2,6,14,0.55); }
+        .vcompare.vcompare-thumb-physics-cover video { object-fit:cover; background:transparent; }
+        .vcompare.vcompare-thumb-physics-stretch video { object-fit:fill; background:transparent; }
         .vcompare:not(.vcompare-thumb) { aspect-ratio:16/9; }
         .vcompare video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
         .vcompare .vcompare-base { z-index:0; }
@@ -412,7 +416,7 @@
                 <div class="mono text-[9px] mt-1 tracking-wider" style="color:var(--t3)">@ 640×480</div>
             </div>
             <div class="px-5 py-3.5 text-center">
-                <div class="mono font-black grad" style="font-size:1.7rem">4096</div>
+                <div class="mono font-black grad" style="font-size:1.7rem">2048</div>
                 <div class="mono text-[9px] mt-1 tracking-wider" style="color:var(--t3)">PARALLEL SCENES</div>
             </div>
             <div class="px-5 py-3.5 text-center">
@@ -727,7 +731,7 @@
                                     <i class="fas fa-eye"></i><i class="fas fa-eye"></i><i class="fas fa-eye"></i>
                                 </span>
                             </td>
-                            <td class="mono nowrap">Up To 4096</td>
+                            <td class="mono nowrap">Up To 2048</td>
                             <td><span class="tbl-badge b-no">✕</span></td>
                             <td><span class="tbl-badge b-na">—</span></td>
                             <td>
@@ -756,7 +760,7 @@
                                     <i class="fas fa-eye"></i><i class="fas fa-eye"></i><i class="fas fa-eye"></i>
                                 </span>
                             </td>
-                            <td class="font-bold text-white mono nowrap">Up To 4096</td>
+                            <td class="font-bold text-white mono nowrap">Up To 2048</td>
                             <td><span class="tbl-badge b-yes">✓</span></td>
                             <td class="font-black text-white mono nowrap" style="text-shadow:0 0 12px rgba(0,212,255,.5)">~10k</td>
                             <td>
@@ -848,35 +852,59 @@
 
             <!-- Images -->
             <div class="lg:w-[55%] space-y-4">
-                <p class="slabel mb-3">stability benchmark — boston dynamics spot (10ms timestep)</p>
+                <p class="slabel mb-3">stability benchmark — mujoco vs gs-playground</p>
                 <div class="grid grid-cols-3 gap-3">
                     <div class="relative">
-                        <div class="cbadge cb-mujoco">MuJoCo</div>
-                        <img src="assets/paper/mujoco_spot_after.jpg"
-                             alt="MuJoCo Spot drift" class="w-full h-36 object-cover rounded-xl" style="border:1px solid var(--bdr)">
-                        <p class="mono text-[9px] mt-1.5 text-center" style="color:var(--t3)">Base drift</p>
+                        <div class="vcompare vcompare-thumb vcompare-thumb-physics" data-left="assets/C1/C1-1-mujoco.mp4" data-right="assets/C1/C1-1-gsp.mp4" style="--p:50%;border:1px solid var(--bdr)">
+                            <video class="vcompare-base" autoplay loop muted playsinline preload="metadata"></video>
+                            <div class="vcompare-top-wrap">
+                                <video class="vcompare-top" autoplay loop muted playsinline preload="metadata"></video>
+                            </div>
+                            <div class="vcompare-label left">MUJOCO</div>
+                            <div class="vcompare-label right">GSP</div>
+                            <div class="vcompare-handle"></div>
+                            <div class="vcompare-knob"></div>
+                            <input class="vcompare-range" type="range" min="0" max="100" value="50" aria-label="Physics video comparison slider 1">
+                        </div>
+                        <p class="mono text-[9px] mt-1.5 text-center" style="color:var(--t3)">Grasp stability</p>
                     </div>
                     <div class="relative">
-                        <div class="cbadge cb-isaac">Isaac Sim</div>
-                        <img src="assets/paper/isaac_spot_after.jpg"
-                             alt="Isaac Spot" class="w-full h-36 object-cover rounded-xl" style="border:1px solid var(--bdr)">
-                        <p class="mono text-[9px] mt-1.5 text-center" style="color:var(--t3)">Instability</p>
+                        <div class="vcompare vcompare-thumb vcompare-thumb-physics vcompare-thumb-physics-cover" data-left="assets/C1/C1-2-mujoco.mp4" data-right="assets/C1/C1-2-gsp.mp4" style="--p:50%;border:1px solid var(--bdr)">
+                            <video class="vcompare-base" autoplay loop muted playsinline preload="metadata"></video>
+                            <div class="vcompare-top-wrap">
+                                <video class="vcompare-top" autoplay loop muted playsinline preload="metadata"></video>
+                            </div>
+                            <div class="vcompare-label left">MUJOCO</div>
+                            <div class="vcompare-label right">GSP</div>
+                            <div class="vcompare-handle"></div>
+                            <div class="vcompare-knob"></div>
+                            <input class="vcompare-range" type="range" min="0" max="100" value="50" aria-label="Physics video comparison slider 2">
+                        </div>
+                        <p class="mono text-[9px] mt-1.5 text-center" style="color:var(--t3)">Interaction stability</p>
                     </div>
                     <div class="relative">
-                        <div class="cbadge cb-ours">Ours ✦</div>
-                        <img src="assets/paper/ours_spot_after.jpg"
-                             alt="GS-Playground Spot" class="w-full h-36 object-cover rounded-xl glow-ours">
-                        <p class="mono text-[9px] mt-1.5 text-center" style="color:var(--c1)">Stable ✓</p>
+                        <div class="vcompare vcompare-thumb vcompare-thumb-physics vcompare-thumb-physics-stretch" data-left="assets/C1/C1-3-mujoco.mp4" data-right="assets/C1/C1-3-gsp.mp4" style="--p:50%;border:1px solid var(--bdr)">
+                            <video class="vcompare-base" autoplay loop muted playsinline preload="metadata"></video>
+                            <div class="vcompare-top-wrap">
+                                <video class="vcompare-top" autoplay loop muted playsinline preload="metadata"></video>
+                            </div>
+                            <div class="vcompare-label left">MUJOCO</div>
+                            <div class="vcompare-label right">GSP</div>
+                            <div class="vcompare-handle"></div>
+                            <div class="vcompare-knob"></div>
+                            <input class="vcompare-range" type="range" min="0" max="100" value="50" aria-label="Physics video comparison slider 3">
+                        </div>
+                        <p class="mono text-[9px] mt-1.5 text-center" style="color:var(--t3)">Large-compensation motion stability</p>
                     </div>
                 </div>
                 <!-- Store: scene + chart -->
-                <p class="slabel mb-3">stability benchmarks</p>
+                <p class="slabel mb-3">complex-scene stability benchmark</p>
                 <div class="chartcar" data-chartcar>
                     <!-- Slide 1: left image + right chart -->
                     <div class="chartcar-slide">
                         <div class="grid sm:grid-cols-2 gap-4 items-stretch">
                             <div class="relative rounded-xl overflow-hidden">
-                                <img src="assets/paper/store_mujoco.png"
+                                <img src="assets/C1/C1-4.png"
                                      alt="Complex multi-body scene" class="w-full h-60 sm:h-64 object-contain" style="border:1px solid var(--bdr);background:rgba(2,6,14,0.25)">
                                 <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(3,8,15,.75),transparent 50%)"></div>
                                 <div class="absolute top-3 left-1/2 -translate-x-1/2 text-center">
